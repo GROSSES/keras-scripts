@@ -2,7 +2,15 @@
 """
 Created on Mon May  9 20:04:38 2016
 
-@author: BigMoyan
+@author: BigMoyan, University of Electronic Science and Technology of China.
+
+get_vgg_body returns the vgg model body (no dense layer included) with pretrained weights
+
+get_vgg returns the the whole vgg model with pretrained weights
+
+you may download the pretrained weights at: http://pan.baidu.com/s/1jIbItRg , the password is 25xt
+
+
 """
 import h5py
 from keras.models import Sequential

@@ -2,7 +2,14 @@
 """
 Created on Tue Jul 12 00:10:26 2016
 
-@author: moyan
+@author: BigMoyan, University of Electronic Science and Techonlogy of China
+
+get_resne50 returns the resnet50 model with pretrained weights
+
+you may download the pretrained model at: http://pan.baidu.com/s/1i5c0tcL , the password is t8f6
+
+pls preserve the information of author when you use this script in your research
+
 """
 
 from keras.layers import merge
@@ -51,61 +58,61 @@ def conv_block(x,nb_filter,stage,block,kernel_size=3):
     out = merge([out,x],mode='sum')
     out = Activation('relu')(out)
     return out
-    
-inp = Input(shape=(3,224,224))
-out = ZeroPadding2D((3,3))(inp)
-out = Convolution2D(64,7,7,subsample=(2,2),name='conv1')(out)
-out = BatchNormalization(axis=1,name='bn_conv1')(out)
-out = Activation('relu')(out)
-out = MaxPooling2D((3,3),strides=(2,2))(out)
+def get_resnet50():    
+	inp = Input(shape=(3,224,224))
+	out = ZeroPadding2D((3,3))(inp)
+	out = Convolution2D(64,7,7,subsample=(2,2),name='conv1')(out)
+	out = BatchNormalization(axis=1,name='bn_conv1')(out)
+	out = Activation('relu')(out)
+	out = MaxPooling2D((3,3),strides=(2,2))(out)
 
-out = conv_block(out,[64,64,256],2,'a')
-out = identity_block(out,[64,64,256],2,'b')
-out = identity_block(out,[64,64,256],2,'c')
+	out = conv_block(out,[64,64,256],2,'a')
+	out = identity_block(out,[64,64,256],2,'b')
+	out = identity_block(out,[64,64,256],2,'c')
 
-out = conv_block(out,[128,128,512],3,'a')
-out = identity_block(out,[128,128,512],3,'b')
-out = identity_block(out,[128,128,512],3,'c')
-out = identity_block(out,[128,128,512],3,'d')
+	out = conv_block(out,[128,128,512],3,'a')
+	out = identity_block(out,[128,128,512],3,'b')
+	out = identity_block(out,[128,128,512],3,'c')
+	out = identity_block(out,[128,128,512],3,'d')
 
-out = conv_block(out,[256,256,1024],4,'a')
-out = identity_block(out,[256,256,1024],4,'b')
-out = identity_block(out,[256,256,1024],4,'c')
-out = identity_block(out,[256,256,1024],4,'d')
-out = identity_block(out,[256,256,1024],4,'e')
-out = identity_block(out,[256,256,1024],4,'f')
+	out = conv_block(out,[256,256,1024],4,'a')
+	out = identity_block(out,[256,256,1024],4,'b')
+	out = identity_block(out,[256,256,1024],4,'c')
+	out = identity_block(out,[256,256,1024],4,'d')
+	out = identity_block(out,[256,256,1024],4,'e')
+	out = identity_block(out,[256,256,1024],4,'f')
 
-out = conv_block(out,[512,512,2048],5,'a')
-out = identity_block(out,[512,512,2048],5,'b')
-out = identity_block(out,[512,512,2048],5,'c')
+	out = conv_block(out,[512,512,2048],5,'a')
+	out = identity_block(out,[512,512,2048],5,'b')
+	out = identity_block(out,[512,512,2048],5,'c')
 
-out = AveragePooling2D((7,7))(out)
-out = Flatten()(out)
-out = Dense(1000,activation='softmax',name='fc1000')(out)
+	out = AveragePooling2D((7,7))(out)
+	out = Flatten()(out)
+	out = Dense(1000,activation='softmax',name='fc1000')(out)
 
-model = Model(inp,out)
+	model = Model(inp,out)
 
 
-model_str = model.to_json()
-open('resnet50.json','w').write(model_str)
+	model_str = model.to_json()
+	open('resnet50.json','w').write(model_str)
 
-import h5py
+	import h5py
 
-f = h5py.File('resnet50.h5','r')
-for layer in model.layers:
-    try:
-        if layer.name[:3]=='res':
-            layer.set_weights([f[layer.name]['weights'][:],f[layer.name]['bias'][:]])
-        elif layer.name[:2]=='bn':
-            scale_name = 'scale'+layer.name[2:]
-            weights = []
-            weights.append(f[scale_name]['weights'][:])
-            weights.append(f[scale_name]['bias'][:])
-            weights.append(f[layer.name]['weights'][:])
-            weights.append(f[layer.name]['bias'][:])
-            layer.set_weights(weights)
-    except Exception:
-        print layer.name
+	f = h5py.File('resnet50.h5','r')
+	for layer in model.layers:
+	    try:
+		if layer.name[:3]=='res':
+		    layer.set_weights([f[layer.name]['weights'][:],f[layer.name]['bias'][:]])
+		elif layer.name[:2]=='bn':
+		    scale_name = 'scale'+layer.name[2:]
+		    weights = []
+		    weights.append(f[scale_name]['weights'][:])
+		    weights.append(f[scale_name]['bias'][:])
+		    weights.append(f[layer.name]['weights'][:])
+		    weights.append(f[layer.name]['bias'][:])
+		    layer.set_weights(weights)
+	    except Exception:
+		print layer.name
 
 
 
