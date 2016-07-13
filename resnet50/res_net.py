@@ -18,7 +18,7 @@ from keras.layers.core import Dense, Activation, Flatten
 from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.layers import Input
-
+import h5py
 
 def identity_block(x,nb_filter,stage,block,kernel_size=3):
     k1,k2,k3 = nb_filter
@@ -96,7 +96,7 @@ def get_resnet50():
 	model_str = model.to_json()
 	open('resnet50.json','w').write(model_str)
 
-	import h5py
+	
 
 	f = h5py.File('resnet50.h5','r')
 	for layer in model.layers:
@@ -113,6 +113,9 @@ def get_resnet50():
 		    layer.set_weights(weights)
 	    except Exception:
 		print layer.name
+	return model
+	
+
 
 
 
