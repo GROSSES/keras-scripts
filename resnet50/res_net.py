@@ -101,22 +101,44 @@ def get_resnet50():
 	f = h5py.File('resnet50.h5','r')
 	for layer in model.layers:
 	    try:
-		if layer.name[:3]=='res':
-		    layer.set_weights([f[layer.name]['weights'][:],f[layer.name]['bias'][:]])
-		elif layer.name[:2]=='bn':
-		    scale_name = 'scale'+layer.name[2:]
-		    weights = []
-		    weights.append(f[scale_name]['weights'][:])
-		    weights.append(f[scale_name]['bias'][:])
-		    weights.append(f[layer.name]['weights'][:])
-		    weights.append(f[layer.name]['bias'][:])
-		    layer.set_weights(weights)
+             if layer.name[:3]=='res':
+                 layer.set_weights([f[layer.name]['weights'][:],f[layer.name]['bias'][:]])
+             elif layer.name[:2]=='bn':
+                 scale_name = 'scale'+layer.name[2:]
+                 weights = []
+
+                 weights.append(f[scale_name]['weights'][:])
+                 weights.append(f[scale_name]['bias'][:])
+                 weights.append(f[layer.name]['weights'][:])
+                 weights.append(f[layer.name]['bias'][:])
+                 layer.set_weights(weights)
 	    except Exception:
-		print layer.name
+             print "fail to load weight %s"%layer.name
+             break
 	return model
 	
 
-
-
-
+if __name__=='__main__':
+    from skimage import io
+    import numpy as np   
+    mean=(123.68,116.779, 103.939)
+    img = io.imread('test.jpg')
+    img = np.resize(img,(224,224,3)).astype('float32')
+    img[:,:,0] -= mean[0]
+    img[:,:,1] -= mean[1]
+    img[:,:,2] -= mean[2]    
+    img = np.transpose(img,(2,0,1))
+    img = np.expand_dims(img,axis=0)
+    model = get_resnet50()
+    result = model.predict(img)
+    print np.argmax(result)
+    result[0,np.argmax(result)]=0
+    print np.argmax(result)
+    result[0,np.argmax(result)]=0
+    print np.argmax(result)
+    result[0,np.argmax(result)]=0
+    print np.argmax(result)
+    result[0,np.argmax(result)]=0
+    print np.argmax(result)
+    result[0,np.argmax(result)]=0
 
