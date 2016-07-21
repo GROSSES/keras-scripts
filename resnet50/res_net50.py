@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 '''This script demonstrates how to build the resnet50 architecture
 using the Keras functional API.
 
@@ -223,8 +222,6 @@ if __name__ == '__main__':
     print "result for test 2 is"
     print lines[np.argmax(model.predict(test_img2)[0])]
 
-    
-=======
 '''This script demonstrates how to build the resnet50 architecture
 using the Keras functional API.
 
@@ -356,4 +353,3 @@ output = Flatten()(output)
 output = Dense(1000, activation='softmax', name='fc1000')(output)
 
 model = Model(img, output)
->>>>>>> 190f9fbb65a278ce6b598dfa635ad3923e617bce
