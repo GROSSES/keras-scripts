@@ -9,17 +9,17 @@ Created on Thu Jul 21 03:11:20 2016
 
 from keras import backend as K
 from keras.utils.np_utils import convert_kernel
-import res_net50
+import res_net50 # this is just for an example, comment if you want to use this script
 import h5py
 
-model = res_net50.get_resnet50()
-model.load_weights('tf_resnet50.h5')
+model = res_net50.get_resnet50() # load the weight
+model.load_weights('tf_resnet50.h5') # load tf/ date
 for layer in model.layers:
-   if layer.name[:4]=='conv' or layer.name[:3]=='res':
+   if layer.__class__.name in ['Convolution2D', 'Convolution1D']:
       original_w = K.get_value(layer.W)
       converted_w = convert_kernel(original_w)
       K.set_value(layer.W, converted_w)
-model.save_weights('th_resnet50.h5')
+model.save_weights('th_resnet50.h5') # save weights
 
 """
 
