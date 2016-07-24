@@ -16,8 +16,8 @@ We provide pretrained weights for your research, this weights were converted fro
 provided by Kaiming He directly.
 
 For now we provide pretrained weights for tensorflow backend, pls donwload pretrained file at:
-http://pan.baidu.com/s/1c1OxKWC
-(Don't be afraid of Chinese, just click the bottom at top right with '(98.2M)')
+http://pan.baidu.com/s/1i4Qp6CH (For China)
+https://drive.google.com/open?id=0B4ChsjFJvew3NVQ2U041Q0xHRHM (For Other contries)
 
 If you are using theano backend,
 you can transfer tf weights to th weights by hand under the instruction at:
@@ -36,8 +36,6 @@ from keras.models import Model
 from keras.layers import Input
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
-
-
 
 
 # The names of layers in resnet50 are generated with the following format
@@ -127,7 +125,7 @@ def read_img(img_path):
     # img has been transfered to (3,224,224) by img_to_array
     img = img_to_array(img)
 
-    #decenterize
+    # decenterize
     img[0, :, :] -= mean[0]
     img[1, :, :] -= mean[1]
     img[2, :, :] -= mean[2]
@@ -196,3 +194,4 @@ if __name__ == '__main__':
     print "result for test 2 is"
     print lines[np.argmax(resnet_model.predict(test_img2)[0])]
     class_table.close()
+
