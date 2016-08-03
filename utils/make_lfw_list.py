@@ -36,9 +36,9 @@ while neg_count<count:
     i = random.randint(0,len(single_imgs)-1)
     j = random.randint(0,len(single_imgs)-1)
     if i!=j:
-        f_couple.write(single_imgs[i]+' '+single_imgs[j] + ' 0\n')
+        f_couple.write(single_imgs[i].strip('\n')+' '+single_imgs[j].strip('\n') + ' 0\n')
         neg_count+=1
-        print "adding %dth negtive samples"%neg_count
+        print "adding %dth negtive samples.."%neg_count
 f_single.close()
 f_couple.close() 
         
