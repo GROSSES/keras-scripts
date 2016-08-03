@@ -3,12 +3,6 @@
 Created on Sat Jul 16 15:14:08 2016
 
 @author: Bigmoyan
-
-This script generate .lst list for LFW dataset
-Run this scripts with LFW dataset in the work directory
-Two .lst files will be generated, you can delete singles.lst
-In couples.lst, each line is a couple of faces, the integer at the end of each line indicate if these two faces belongs to a single man, 1 for same and 0 for different
-Note that the generated list is not shuffled, you need to randomly shuffle it before using it as training set.
 """
 
 import os
@@ -42,7 +36,7 @@ while neg_count<count:
     i = random.randint(0,len(single_imgs)-1)
     j = random.randint(0,len(single_imgs)-1)
     if i!=j:
-        f_couple.write(single_imgs[i]+' '+single_imgs[j] + ' 1\n')
+        f_couple.write(single_imgs[i]+' '+single_imgs[j] + ' 0\n')
         neg_count+=1
         print "adding %dth negtive samples"%neg_count
 f_single.close()
