@@ -19,8 +19,8 @@ for people in os.listdir(path):
     if len(img_list)==1:
         f_single.write(os.path.join(path,people,img_list[0])+'\n')
     else:
-        f_single.write(os.path.join(path,people,img_list[0])+'\n')
         for i in range(len(img_list)):
+            f_single.write(os.path.join(path,people,img_list[0])+'\n')
             for j in range(i+1,len(img_list)):
                 count+=1
                 print "adding %dth postive samples.."%count
@@ -35,7 +35,7 @@ neg_count = 0
 while neg_count<count:
     i = random.randint(0,len(single_imgs)-1)
     j = random.randint(0,len(single_imgs)-1)
-    if i!=j:
+    if single_imgs[i].split(os.path.sep)[1] != single_imgs[j].split(os.path.sep)[1]:
         f_couple.write(single_imgs[i].strip('\n')+' '+single_imgs[j].strip('\n') + ' 0\n')
         neg_count+=1
         print "adding %dth negtive samples.."%neg_count
